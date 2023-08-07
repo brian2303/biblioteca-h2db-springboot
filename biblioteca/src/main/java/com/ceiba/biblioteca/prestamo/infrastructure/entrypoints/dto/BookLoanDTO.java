@@ -1,14 +1,31 @@
 package com.ceiba.biblioteca.prestamo.infrastructure.entrypoints.dto;
 
+import java.time.LocalDate;
+
 public class BookLoanDTO {
+
     private String isbn;
     private String identificacionUsuario;
-    private String tipoUsuario;
+    private Integer tipoUsuario;
 
-    public BookLoanDTO(String isbn, String identificacionUsuario, String tipoUsuario) {
-        this.isbn = isbn;
-        this.identificacionUsuario = identificacionUsuario;
-        this.tipoUsuario = tipoUsuario;
+    private Long id;
+
+    private String fechaMaximaDevolucion;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFechaMaximaDevolucion() {
+        return fechaMaximaDevolucion;
+    }
+
+    public void setFechaMaximaDevolucion(String fechaMaximaDevolucion) {
+        this.fechaMaximaDevolucion = fechaMaximaDevolucion;
     }
 
     public BookLoanDTO() {
@@ -30,11 +47,11 @@ public class BookLoanDTO {
         this.identificacionUsuario = identificacionUsuario;
     }
 
-    public String getTipoUsuario() {
+    public Integer getTipoUsuario() {
         return tipoUsuario;
     }
 
-    public void setTipoUsuario(String tipoUsuario) {
+    public void setTipoUsuario(Integer tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
 }

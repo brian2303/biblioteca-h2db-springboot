@@ -4,4 +4,5 @@ import com.ceiba.biblioteca.prestamo.infrastructure.drivenadapters.entities.Book
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookLoanRepositoryImpl extends JpaRepository<BookLoanEntity,Long> {
+    BookLoanEntity findByUserIdentification(String userIdentification);
 }

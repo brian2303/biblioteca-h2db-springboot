@@ -15,6 +15,8 @@ public class MapModelUtils {
 
     public static BookLoanDTO mapToBookLoanDTO(BookLoan bookLoan){
         BookLoanDTO bookLoanDTO = new BookLoanDTO();
+        bookLoanDTO.setId(bookLoan.getId());
+        bookLoanDTO.setFechaMaximaDevolucion(bookLoan.getMaximumReturnDate());
         bookLoanDTO.setIsbn(bookLoan.getIsbn());
         bookLoanDTO.setTipoUsuario(bookLoan.getUserType());
         bookLoanDTO.setIdentificacionUsuario(bookLoan.getUserIdentification());
@@ -32,11 +34,14 @@ public class MapModelUtils {
 
     public static BookLoan mapToModelFromEntity(BookLoanEntity bookLoanEntity){
         BookLoan bookLoan = new BookLoan();
-        bookLoan.setId(bookLoanEntity.getId());
-        bookLoan.setUserIdentification(bookLoanEntity.getUserIdentification());
-        bookLoan.setUserType(bookLoanEntity.getUserType());
-        bookLoan.setUserIdentification(bookLoanEntity.getUserIdentification());
-        bookLoan.setMaximumReturnDate(bookLoanEntity.getMaximumReturnDate());
+        if (bookLoanEntity != null){
+            bookLoan.setId(bookLoanEntity.getId());
+            bookLoan.setUserIdentification(bookLoanEntity.getUserIdentification());
+            bookLoan.setUserType(bookLoanEntity.getUserType());
+            bookLoan.setUserIdentification(bookLoanEntity.getUserIdentification());
+            bookLoan.setIsbn(bookLoanEntity.getIsbn());
+            bookLoan.setMaximumReturnDate(bookLoanEntity.getMaximumReturnDate());
+        }
         return bookLoan;
     }
 }

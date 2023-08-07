@@ -14,22 +14,24 @@ public class BookLoanEntity {
     @Column(name = "user_identification", length = 10)
     private String userIdentification;
     @Column(name = "user_type", length = 1)
-    private String userType;
+    private Integer userType;
 
-    public LocalDate getMaximumReturnDate() {
+    @Column(name = "maximum_return_date")
+    private String maximumReturnDate;
+
+    public String getMaximumReturnDate() {
         return maximumReturnDate;
     }
 
-    public void setMaximumReturnDate(LocalDate maximumReturnDate) {
+    public void setMaximumReturnDate(String maximumReturnDate) {
         this.maximumReturnDate = maximumReturnDate;
     }
 
-    @Column(name = "maximum_return_date")
-    private LocalDate maximumReturnDate;
+
 
     public BookLoanEntity() {}
 
-    public BookLoanEntity(Long id, String isbn, String userIdentification, String userType, LocalDate maximumReturnDate) {
+    public BookLoanEntity(Long id, String isbn, String userIdentification, Integer userType, String maximumReturnDate) {
         this.id = id;
         this.isbn = isbn;
         this.userIdentification = userIdentification;
@@ -61,11 +63,11 @@ public class BookLoanEntity {
         this.userIdentification = userIdentification;
     }
 
-    public String getUserType() {
+    public Integer getUserType() {
         return userType;
     }
 
-    public void setUserType(String userType) {
+    public void setUserType(Integer userType) {
         this.userType = userType;
     }
 }
