@@ -20,7 +20,19 @@ public class BookLoanUseCase {
     }
 
     public BookLoan addBookLoan(BookLoan bookLoan){
+
+        if (bookLoan.getUserType() != GUEST_USER && bookLoan.getUserType() != AFFILIATE_USER && bookLoan.getUserType() != EMPLOYEE_USER){
+            throw new RuntimeException("Tipo de usuario no permitido en la biblioteca");
+        }
+
         BookLoan bookLoanFound = bookLoanRepository.findByUserIdentification(bookLoan.getUserIdentification());
+
+        if (bookLoanFound.getId() != null && bookLoanFound.getUserType() == GUEST_USER){
+            throw new RuntimeException(
+                    String.format("El usuario con identificación %s ya tiene un libro prestado por lo cual" +
+                            " no se le puede realizar otro préstamo",bookLoanFound.getUserIdentification())
+            );
+        }
 
         if (bookLoan.getUserType() == AFFILIATE_USER){
             LocalDate maximumDate = addDaysSkippingWeekends(LocalDate.now(),10);
@@ -29,8 +41,18 @@ public class BookLoanUseCase {
             return bookLoanRepository.addLoan(bookLoan);
         }
 
-        if (bookLoanFound.getId() != null && bookLoanFound.getUserType() == GUEST_USER){
-            System.out.println();
+        if (bookLoan.getUserType() == EMPLOYEE_USER){
+            LocalDate maximumDate = addDaysSkippingWeekends(LocalDate.now(),8);
+            String dateFormat = maximumDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            bookLoan.setMaximumReturnDate(dateFormat);
+            return bookLoanRepository.addLoan(bookLoan);
+        }
+
+        if (bookLoan.getUserType() == GUEST_USER){
+            LocalDate maximumDate = addDaysSkippingWeekends(LocalDate.now(),7);
+            String dateFormat = maximumDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            bookLoan.setMaximumReturnDate(dateFormat);
+            return bookLoanRepository.addLoan(bookLoan);
         }
         return bookLoanRepository.addLoan(bookLoan);
     }
