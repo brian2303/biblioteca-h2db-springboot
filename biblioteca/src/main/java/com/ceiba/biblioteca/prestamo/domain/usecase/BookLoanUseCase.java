@@ -13,6 +13,11 @@ public class BookLoanUseCase {
     private static final int EMPLOYEE_USER = 2;
     private static final int GUEST_USER = 3;
 
+    private static final String USER_NOT_ALLOWED = "Tipo de usuario no permitido en la biblioteca";
+    private static final String USER_BOOK_LOAN_ALREADY_EXISTS = "El usuario con identificación %s ya tiene un libro prestado" +
+            " por lo cual no se le puede realizar otro préstamo";
+
+
     BookLoanRepository bookLoanRepository;
 
     public BookLoanUseCase(BookLoanRepository bookLoanRepository) {
@@ -21,39 +26,32 @@ public class BookLoanUseCase {
 
     public BookLoan addBookLoan(BookLoan bookLoan){
 
-        if (bookLoan.getUserType() != GUEST_USER && bookLoan.getUserType() != AFFILIATE_USER && bookLoan.getUserType() != EMPLOYEE_USER){
-            throw new RuntimeException("Tipo de usuario no permitido en la biblioteca");
-        }
-
         BookLoan bookLoanFound = bookLoanRepository.findByUserIdentification(bookLoan.getUserIdentification());
 
         if (bookLoanFound.getId() != null && bookLoanFound.getUserType() == GUEST_USER){
             throw new RuntimeException(
-                    String.format("El usuario con identificación %s ya tiene un libro prestado por lo cual" +
-                            " no se le puede realizar otro préstamo",bookLoanFound.getUserIdentification())
+                    String.format(USER_BOOK_LOAN_ALREADY_EXISTS,bookLoanFound.getUserIdentification())
             );
         }
 
         if (bookLoan.getUserType() == AFFILIATE_USER){
-            LocalDate maximumDate = addDaysSkippingWeekends(LocalDate.now(),10);
-            String dateFormat = maximumDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            bookLoan.setMaximumReturnDate(dateFormat);
-            return bookLoanRepository.addLoan(bookLoan);
+            return addBookLoanByUser(10,bookLoan);
         }
 
         if (bookLoan.getUserType() == EMPLOYEE_USER){
-            LocalDate maximumDate = addDaysSkippingWeekends(LocalDate.now(),8);
-            String dateFormat = maximumDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            bookLoan.setMaximumReturnDate(dateFormat);
-            return bookLoanRepository.addLoan(bookLoan);
+            return addBookLoanByUser(8,bookLoan);
         }
 
         if (bookLoan.getUserType() == GUEST_USER){
-            LocalDate maximumDate = addDaysSkippingWeekends(LocalDate.now(),7);
-            String dateFormat = maximumDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            bookLoan.setMaximumReturnDate(dateFormat);
-            return bookLoanRepository.addLoan(bookLoan);
+            return addBookLoanByUser(7,bookLoan);
         }
+        throw new RuntimeException(USER_NOT_ALLOWED);
+    }
+
+    private BookLoan addBookLoanByUser(Integer days,BookLoan bookLoan){
+        LocalDate maximumDate = addDaysSkippingWeekends(LocalDate.now(),days);
+        String dateFormat = maximumDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        bookLoan.setMaximumReturnDate(dateFormat);
         return bookLoanRepository.addLoan(bookLoan);
     }
 
