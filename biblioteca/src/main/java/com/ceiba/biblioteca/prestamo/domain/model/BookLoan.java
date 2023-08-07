@@ -7,11 +7,14 @@ public class BookLoan {
     private Long id;
     private String isbn;
     private String userIdentification;
-    private int userType;
+    private String userType;
 
     private LocalDate maximumReturnDate;
 
-    public BookLoan(Long id, String isbn, String userIdentification, int userType, LocalDate maximumReturnDate) {
+    public BookLoan() {
+    }
+
+    public BookLoan(Long id, String isbn, String userIdentification, String userType, LocalDate maximumReturnDate) {
         this.id = id;
         this.isbn = isbn;
         this.userIdentification = userIdentification;
@@ -56,11 +59,11 @@ public class BookLoan {
         this.userIdentification = userIdentification;
     }
 
-    public int getUserType() {
+    public String getUserType() {
         return userType;
     }
 
-    public void setUserType(int userType) {
+    public void setUserType(String userType) {
         this.userType = userType;
     }
 }
